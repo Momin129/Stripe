@@ -6,7 +6,9 @@ function Login(props) {
       sx={{
         height: { xs: "auto", md: 1 },
         padding: 3,
+        paddingY: 10,
         marginBottom: { xs: 5, md: 0 },
+        backgroundColor: "white",
       }}
     >
       <Typography
@@ -15,6 +17,7 @@ function Login(props) {
           fontWeight: "bold",
           textAlign: "center",
           marginTop: { xs: 5, md: 10 },
+          color: "#2d8659",
         }}
       >
         Login
@@ -37,7 +40,20 @@ function Login(props) {
             sx={{ width: 1 }}
           />
         </Grid>
-
+        <Grid item xs={12}>
+          <Typography
+            sx={{
+              color: "blue",
+              fontWeight: "bold",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+            // eslint-disable-next-line react/prop-types
+            onClick={() => props.setLogin(false)}
+          >
+            Don't have an account? Sing Un
+          </Typography>
+        </Grid>
         <Grid
           item
           xs={12}
@@ -47,26 +63,12 @@ function Login(props) {
           <Button
             variant="contained"
             color="secondary"
-            sx={{ fontWeight: "bold" }}
+            sx={{ fontWeight: "bold", marginTop: 5 }}
           >
             Login
           </Button>
         </Grid>
       </Grid>
-      <Box
-        flexGrow={1}
-        sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}
-      >
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{ paddingX: 10, fontWeight: "bold" }}
-          // eslint-disable-next-line react/prop-types
-          onClick={() => props.setLogin(false)}
-        >
-          Sign Up
-        </Button>
-      </Box>
     </Box>
   );
 }

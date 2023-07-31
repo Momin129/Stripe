@@ -8,35 +8,24 @@ export default function Tabs() {
   return (
     <Box
       sx={{
-        paddingTop: 10,
-        paddingX: { xs: 3, md: 50 },
-        height: "80%",
+        paddingY: 10,
+        height: "auto",
+        backgroundColor: "#66cc99",
       }}
     >
       <Grid
         container
         sx={{
-          border: { xs: 1, md: 2 },
-          borderRadius: 5,
-          height: { md: 700 },
+          borderRadius: { md: 5 },
+          boxShadow: 15,
+          height: { md: "auto" },
           overflow: "hidden",
+          margin: "0 auto",
           marginBottom: { xs: 5, md: 0 },
+          width: { md: 600 },
         }}
       >
-        <Grid
-          item
-          md={4}
-          sx={{
-            display: { xs: "none", md: "block" },
-          }}
-        >
-          <Box
-            component={"img"}
-            src={!login ? "/images/register.jpg" : "/images/login.jpg"}
-            sx={{ width: 1, height: 1 }}
-          ></Box>
-        </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12}>
           {!login ? (
             <Register setLogin={setLogin} />
           ) : (
