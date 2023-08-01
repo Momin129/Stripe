@@ -9,12 +9,17 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validateForm } from "../utility/formValidation";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Register(props) {
+  const navigate = useNavigate();
+  const [responseMsg, setResponseMsg] = useState("");
   const [passType, setPassType] = useState("password");
   const [confirmPassType, setConfirmPassType] = useState("password");
   const [register, setRegister] = useState(true);
@@ -26,28 +31,75 @@ function Register(props) {
     password: "",
     confirmpassword: "",
   });
+
+  // check if able to register.
+  useEffect(() => {
+    if (inputs && inputs.password === inputs.confirmpassword) {
+      let valid = false;
+      for (let item in error) {
+        if (error[item].length != 0 || !inputs[item]) valid = true;
+      }
+      setRegister(valid);
+    } else setRegister(true);
+  }, [inputs, error]);
+
+  // set values of input fields
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const handleBlur = (event) => {
+  // validate values of input fields
+  const handleBlur = async (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    let returnMsg = validateForm(name, value);
+    let returnMsg = await validateForm(name, value);
     if (name == "confirmpassword" && returnMsg == "") {
       if (value != inputs.password) returnMsg = "*Password does not match";
     }
     setError((values) => ({ ...values, [name]: returnMsg }));
-
-    let valid = false;
-
-    for (let item in error) {
-      if (error[item] != "") valid = true;
-    }
-    setRegister(valid);
   };
+
+  async function handleAPI() {
+    let result = await axios.post(url, obj);
+  }
+  // handle registration
+  const handleSubmit = async () => {
+    let obj = {
+      name: inputs.fullname,
+      email: inputs.email,
+      mobile: inputs.number,
+      password: inputs.password,
+    };
+    let url = "http://localhost:5000/api/user/register";
+    try {
+      axios
+        .post(url, obj)
+        .then((result) => {
+          for (let item in inputs) setInputs(inputs[item] == "");
+          setRegister(true);
+          setResponseMsg(result.data.message);
+          navigate("/pay");
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // console.log("result", result);
+      // if (result.status === 200) {
+      //   console.log("here");
+      //   for (let item in inputs) setInputs(inputs[item] == "");
+      //   setRegister(true);
+      //   setResponseMsg(result.data.message);
+      //   navigate("/pay");
+      //   console.log(result);
+      // }
+    } catch (error) {
+      setResponseMsg(error.response.data.message);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -188,7 +240,7 @@ function Register(props) {
             }}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={7}>
           <Typography
             sx={{
               color: "blue",
@@ -202,12 +254,20 @@ function Register(props) {
             Already have an account? Sing In
           </Typography>
         </Grid>
+        {responseMsg.length != 0 ? (
+          <Grid item xs={12}>
+            <Alert severity="success">{responseMsg}</Alert>
+          </Grid>
+        ) : (
+          ""
+        )}
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
           <Button
             variant="contained"
             color="success"
             sx={{ fontWeight: "bold", marginTop: 3, borderRadius: 25 }}
             disabled={register}
+            onClick={handleSubmit}
           >
             Register
           </Button>

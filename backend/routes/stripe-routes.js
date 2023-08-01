@@ -48,23 +48,6 @@ router.post(`/session`, async (req, res) => {
     }
   );
 
-  const user = await stripe.customers.list({
-    email: session.customer_details.email,
-  });
-
-  const customer_id = user.data[0].id;
-  const subscriptions = await stripe.subscriptions.list({
-    customer: customer_id,
-  });
-
-  // console.log(subscriptions.data[0].current_period_start);
-  const obj = {
-    sub_id: subscriptions.data[0].id,
-    email: req.body.email,
-    start_date: subscriptions.data[0].current_period_start,
-    end_date: subscriptions.data[0].current_period_end,
-  };
-  console.log(obj);
   res.json(session);
 });
 
