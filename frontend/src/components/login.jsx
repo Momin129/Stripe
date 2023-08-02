@@ -4,9 +4,9 @@ function Login(props) {
   return (
     <Box
       sx={{
-        height: { xs: "auto", md: 1 },
+        height: { md: "100%" },
         padding: 3,
-        paddingY: 10,
+        paddingY: 15,
         marginBottom: { xs: 5, md: 0 },
         backgroundColor: "white",
       }}

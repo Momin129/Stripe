@@ -61,9 +61,6 @@ function Register(props) {
     setError((values) => ({ ...values, [name]: returnMsg }));
   };
 
-  async function handleAPI() {
-    let result = await axios.post(url, obj);
-  }
   // handle registration
   const handleSubmit = async () => {
     let obj = {
@@ -73,31 +70,21 @@ function Register(props) {
       password: inputs.password,
     };
     let url = "http://localhost:5000/api/user/register";
-    try {
-      axios
-        .post(url, obj)
-        .then((result) => {
-          for (let item in inputs) setInputs(inputs[item] == "");
-          setRegister(true);
-          setResponseMsg(result.data.message);
-          navigate("/pay");
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      // console.log("result", result);
-      // if (result.status === 200) {
-      //   console.log("here");
-      //   for (let item in inputs) setInputs(inputs[item] == "");
-      //   setRegister(true);
-      //   setResponseMsg(result.data.message);
-      //   navigate("/pay");
-      //   console.log(result);
-      // }
-    } catch (error) {
-      setResponseMsg(error.response.data.message);
-    }
+
+    axios
+      .post(url, obj)
+      .then((result) => {
+        setRegister(true);
+        setResponseMsg(result.data.message);
+        setTimeout(() => {
+          navigate("/pay", { state: { email: inputs.email } });
+        }, 3000);
+        console.log(result);
+      })
+      .catch((error) => {
+        setResponseMsg(error.response.data.message);
+        console.log(error);
+      });
   };
 
   return (

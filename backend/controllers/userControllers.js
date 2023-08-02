@@ -36,7 +36,6 @@ const checkExistance = asyncHandler(async (req, res) => {
   const emailExists = await User.findOne({ email });
   const mobile = req.body.mobile;
   const mobileExists = await User.findOne({ mobile });
-  console.log(email, mobile);
 
   if (email) {
     if (emailExists) {
@@ -50,14 +49,5 @@ const checkExistance = asyncHandler(async (req, res) => {
     else res.status(200).json({ message: "" });
   }
 });
-
-// const checkMobile = asyncHandler(async (req, res) => {
-//   const { mobile } = req.body;
-//   // check if given number already exists
-//   const mobileExists = await User.findOne({ mobile });
-//   if (mobileExists)
-//     res.status(411).json({ message: "Mobile number already exists." });
-//   else res.status(200).json({ message: "" });
-// });
 
 module.exports = { registerUser, checkExistance };

@@ -8,8 +8,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-const email = "test2@gmail.com";
+import { useLocation } from "react-router-dom";
+
 function Subscribe() {
+  const location = useLocation();
+  const email = location.state.email;
   const [prices, setPrices] = useState([]);
   useEffect(() => {
     fetchPrices();
@@ -24,7 +27,7 @@ function Subscribe() {
 
   const createSession = async (priceId) => {
     const { data: response } = await axios.post(
-      `http://localhost:5000/api/stripe/session`,
+      `http://localhost:5000/api/stripe/updateSubscription`,
       {
         priceId,
         email,

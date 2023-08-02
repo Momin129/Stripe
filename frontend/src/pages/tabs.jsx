@@ -9,7 +9,7 @@ export default function Tabs() {
     <Box
       sx={{
         paddingY: 10,
-        height: "auto",
+        height: "80%",
         backgroundColor: "#66cc99",
       }}
     >
